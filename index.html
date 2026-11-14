@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<script>
+(function () {
+  var q = new URLSearchParams(location.search);
+  var keys = ["view", "phone", "kisa", "scenario", "era", "study", "brand"];
+  if (!keys.some(function (k) { return q.has(k); })) {
+    location.replace("index.html?view=jury&kisa=1&phone=1&brand=independent" + (location.search ? "&" + location.search.slice(1) : "") + "#demo");
+  }
+})();
+</script>
+<script>(function(){var q=new URLSearchParams(location.search);if(q.toString()&&q.get("brand")!=="independent"){q.set("brand","independent");location.replace(location.pathname+"?"+q.toString()+location.hash);}})();</script>
+<style>#tour-contact { display: none !important; }</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sinaptik demo</title>
+<link rel="icon" href="data:,">
+<meta name="description" content="Sinaptik, ödemelerin ve güvenlik payından sonra birikime ayırabileceğin tutarı gösteren bir finans deneyimi prototipi. Erken erişim listesine katıl.">
+<meta name="theme-color" content="#34265C">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<link rel="stylesheet" href="css/style.css?v=20261109-feyz-2">
+<link rel="stylesheet" href="css/landing.css?v=20261031-sinaptik-1">
+<link rel="stylesheet" href="css/independent-preview.css?v=20261029-fintech-2">
+<script>
+(function () {
+  var q = new URLSearchParams(location.search);
+  document.documentElement.dataset.landing = String(!["view", "phone", "kisa", "scenario", "era", "study"].some(function (key) { return q.has(key); }));
+  document.documentElement.dataset.independent = String(q.get("brand") === "independent");
+})();
+</script>
+</head>
+<body>
+<a class="landing-skip landing-only" href="#top">İçeriğe geç</a>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top" aria-label="Sinaptik ana sayfa"><span class="landing-mark" aria-hidden="true">↗</span><span class="brand-name" id="brand-name">Sinaptik</span><span class="brand-tag">Parana biraz daha alan.</span></a>
+    <nav class="links" aria-label="Bölümler">
+      <a href="#problem">Neler sunuyor?</a>
+      <a href="#nasil-calisir">Nasıl çalışır?</a>
+      <a href="#demo">Ön gösterim</a>
+    </nav>
+    <a class="btn primary small landing-nav-cta" href="#erken-erisim" data-landing-cta="nav">Erken erişime katıl</a>
+  </div>
+</header>
+
+<main id="top" tabindex="-1">
+<section class="hero">
+  <div class="wrap landing-hero-grid">
+    <div>
+      <p class="kicker">Bağımsız finans asistanın</p>
+      <h1>Hayatına yer aç.<br><em>Birikimine de.</em></h1>
+      <p class="lead">Ayın ödemeleri, beklenmedik giderler, yapmak istediklerin… Sinaptik, hepsini birlikte düşünerek birikime ne kadar ayırabileceğini gösteren bağımsız bir finans deneyimi. Son söz her zaman sende.</p>
+      <div class="hero-actions">
+        <a class="btn white" href="#erken-erisim" data-landing-cta="hero">Erken erişime katıl <span aria-hidden="true">↗</span></a>
+        <a class="landing-text-link" href="#demo">Ön gösterimi incele <span aria-hidden="true">↓</span></a>
+      </div>
+      <p class="landing-hero-note">Erken aşamadayız. Bir sonraki adımı birlikte tasarlayalım.</p>
+    </div>
+    <div class="landing-hero-video landing-only">
+      <video id="landing-brand-video" controls playsinline preload="none" poster="media/sinaptik-animation-2x-poster.jpg" width="1280" height="720" tabindex="0" aria-label="Sinaptik videosu">
+        <source src="media/sinaptik-animation-2x.mp4" type="video/mp4">
+        Tarayıcın videoyu oynatamıyor. <a href="media/sinaptik-animation-2x.mp4">Videoyu aç.</a>
+      </video>
+    </div>
+  </div>
+</section>
+
+<section id="problem" class="section">
+  <div class="wrap">
+    <p class="eyebrow">Günlük para kararlarında yanında</p>
+    <h2>Paran için daha az hesap.<br>Hayatın için daha çok alan.</h2>
+    <p class="intro">Sinaptik’i, paranın günlük hayatına ayak uydurması için tasarlıyoruz.</p>
+    <div class="landing-features">
+      <article><span class="landing-feature-number">01 / BİRİKİM</span><h3>Ayırabileceğin tutarı gör.</h3><p>Ödemelerini ve güvenlik payını hesaba katan önerinin nedenini incele. Sana uygun değilse tutarı değiştir.</p></article>
+      <article><span class="landing-feature-number">02 / DEĞİŞEN KOŞULLAR</span><h3>Planın hayatına uysun.</h3><p>Kart ekstren veya beklenmedik bir gider geldiğinde, birikime ayırabileceğin tutarın nasıl değiştiğini gör.</p></article>
+      <article><span class="landing-feature-number">03 / KONTROL</span><h3>Son kararı sen ver.</h3><p>Öneriyi kabul et, düzenle ya da ertele. Prototipte bir para hareketi için tutarı ve yönünü görerek iki adımda onay ver.</p></article>
+      <article><span class="landing-feature-number">04 / İŞLEM ANI</span><h3>Göndermeden önce durup bak.</h3><p>Kurgusal şüpheli transfer örneğinde hangi işaretlerin dikkat gerektirdiğini ve destek adımını incele.</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="nasil-calisir" class="section alt landing-only">
+  <div class="wrap">
+    <p class="eyebrow">Nasıl çalışır?</p>
+    <h2>Öneriden karara, üç kısa adım.</h2>
+    <ol class="landing-steps">
+      <li><span>1</span><h3>Önerini gör.</h3><p>Ödemelerinden ve güvenlik payından sonra ne kadar ayırabileceğini incele.</p></li>
+      <li><span>2</span><h3>Kendine göre düzenle.</h3><p>Neden bu tutarın önerildiğini aç. İstersen tutarı değiştir ya da şimdilik ayırma.</p></li>
+      <li><span>3</span><h3>Onayla, sonucunu gör.</h3><p>İşlemi kontrol ederek onayla. Koşullar değişirse güncellenen öneriye yeniden karar ver.</p></li>
+    </ol>
+    <div class="landing-section-cta"><a class="btn primary" href="#erken-erisim" data-landing-cta="features">Erken erişime katıl <span aria-hidden="true">↗</span></a><span>İlk prototip testleri için iletişimde kalalım.</span></div>
+  </div>
+</section>
+
+<!-- 3. Demo -->
+<section id="demo" class="section alt">
+  <div class="wrap">
+    <p class="eyebrow">Ürün ön gösterimi</p>
+    <h2>Beş sahne.<br>Kontrolün sende olduğu bir gelecek.</h2>
+    <p class="intro">Birikimden değişen ödemelere, şüpheli bir işlemden kendi koyduğun kurallara. Kısa, etkileşimli deneyimi incele.</p>
+    <p class="landing-preview-note landing-only">Bu bir geliştirme prototipidir. Veriler ve işlemler kurgusaldır. Gerçek hesabına, banka sistemlerine veya bir yapay zekâ modeline bağlı değildir.</p>
+
+    <div class="landing-showcase landing-only">
+      <div class="landing-demo-copy">
+        <span class="landing-demo-tag">SİNAPTİK / ETKİLEŞİMLİ ÖN GÖSTERİM</span>
+        <h3>Sen seç.<br>Sinaptik’in yaklaşımını gör.</h3>
+        <p>Üstteki dört sahneden birini seç. Her örneği hazır olduğunda kendin başlat.</p>
+        <div class="landing-demo-points"><p><span>01—02</span>Birikim, ekstre ve işlem anı</p><p><span>03—04</span>Kurallar ve ajanlar · gelecek vizyonu</p></div>
+        <p class="landing-demo-disclaimer">Kurgusal hesaplar ve işlemler. Gerçek banka bağlantısı veya para hareketi yok.</p>
+        <a class="btn primary" href="#erken-erisim" data-landing-cta="demo">Erken erişime katıl <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="landing-device"><div class="landing-device-top"><span>Sinaptik</span><span>Kurgusal demo <i aria-hidden="true"></i></span></div><iframe id="landing-short-preview" title="Sinaptik kısa ürün demosu: Birikim, Kalkan, Kurallar ve Ajanlar" data-preview-src="juri-canli-kisa.html?brand=independent" loading="lazy"></iframe></div>
+    </div>
+    <div class="demo-grid legacy-prototype">
+      <div class="phone-col">
+        <div class="phone" id="phone" aria-label="Telefon demosu">
+          <div class="statusbar"><span>9:00</span><span class="notch"></span><span>%87</span></div>
+          <div class="screen" id="screen"></div>
+          <div id="tabbar"></div>
+        </div>
+        <button type="button" class="btn line-dark small" id="reset-demo">Demoyu baştan başlat</button>
+      </div>
+      <aside class="trace" id="trace" aria-label="Demo hikâyesi ve isteğe bağlı ayrıntılar"></aside>
+    </div>
+  </div>
+</section>
+
+<section id="akbank" class="section">
+  <div class="wrap landing-faq-layout">
+    <div><p class="eyebrow">Merak ettiklerin</p><h2>Denemeden önce.</h2><p class="intro">Sinaptik’i kullanıcılarla birlikte geliştiriyoruz.</p></div>
+    <div class="landing-faq">
+      <details><summary>Sinaptik kimler için?</summary><p>Düzenli geliri olmasına rağmen ödemelerden sonra ne kadar birikim yapabileceğini kestirmekte zorlanan ve para kararlarında kontrolü korumak isteyen kişiler için tasarlanıyor.</p></details>
+      <details><summary>Şu anda gerçek hesabımla kullanabilir miyim?</summary><p>Henüz hayır. Burada yalnız kurgusal verilerle çalışan bir prototip var. Gerçek banka bağlantısı, gerçek para hareketi ve canlı yapay zekâ entegrasyonu bulunmuyor.</p></details>
+      <details><summary>Erken erişime katılınca ne olacak?</summary><p>E-posta adresini erken erişim listesine bırakacaksın. Prototipi denemen ve geri bildirim vermen için seninle iletişime geçeceğiz. Bu kayıt bir banka hesabı veya yatırım hesabı açmaz.</p></details>
+      <details><summary>Sinaptik bir banka mı?</summary><p>Sinaptik, bağımsız bir fintech girişimi olarak tasarlanan bir finans asistanı projesidir. Şu anda geliştirme aşamasındayız. Buradaki demo hesap açmaz, para tutmaz ve gerçek işlem yapmaz.</p></details>
+      <details><summary>Buradaki hangi deneyimler geliştirme aşamasında?</summary><p>Birikim, ekstre ve şüpheli işlem akışları kurgusal işlem simülasyonlarıdır. Kurallara göre otomasyon ve diğer ajanlarla çalışma ekranları gelecek deneyim önerileridir. Kullanıma açılmış hizmetler olarak sunulmaz.</p></details>
+    </div>
+  </div>
+</section>
+
+<section id="olcum" class="landing-research">
+  <div class="wrap"><p><b>Dinleyerek geliştiriyoruz.</b> Sinaptik’in problem keşfi 16 kullanıcı görüşmesine dayanıyor. Prototip kullanıcı geri bildirimleriyle geliştiriliyor. Bu çalışmalar, pazar talebinin veya finansal faydanın doğrulandığı anlamına gelmiyor.</p></div>
+</section>
+
+<section id="erken-erisim" class="section landing-only landing-signup">
+  <div class="wrap landing-signup-grid">
+    <div><p class="eyebrow">Bir sonraki adımı birlikte atalım</p><h2>Sinaptik’i ilk deneyenlerden ol.</h2><p class="intro">Erken erişim listesine katıl. Prototipi denemen ve deneyimini bizimle paylaşman için sana e-posta ile ulaşalım.</p><p class="landing-signup-note">Tek ihtiyacımız e-posta adresin.</p></div>
+    <form id="early-access-form" class="landing-form" method="post" action="/api/early-access" aria-describedby="early-access-privacy">
+      <label for="early-access-email">E-posta adresin</label>
+      <input id="early-access-email" type="email" name="email" autocomplete="email" inputmode="email" maxlength="254" placeholder="ornek@eposta.com" required>
+      <label class="landing-consent"><input type="checkbox" name="consent" required><span>Erken erişim ve prototip testine davet edilmek için e-posta ile iletişim kurulmasını kabul ediyorum.</span></label>
+      <button type="submit" class="btn primary" id="early-access-submit">Erken erişime katıl <span aria-hidden="true">↗</span></button>
+      <p id="early-access-privacy">E-posta adresini yalnız erken erişim daveti ve prototip testi iletişimi için kullanacağız. Banka veya hesap bilgisi istemiyoruz.</p>
+      <p id="early-access-status" role="status" aria-live="polite" tabindex="-1"></p>
+      <noscript><p>Bu formu göndermek için JavaScript’i etkinleştirmen gerekiyor.</p></noscript>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="landing-footer-brand"><span class="landing-mark" aria-hidden="true">↗</span><b>Sinaptik</b><span>Birikim, artan paraya kalmasın.</span></div>
+    <p>© 2026 Sinaptik · Bağımsız fintech projesi. Geliştirme aşamasındadır. Ön gösterimdeki tüm hesaplar ve işlemler kurgusaldır.</p>
+  </div>
+</footer>
+
+<script src="js/data.js?v=20261031-sinaptik-1"></script>
+<script src="js/presentation.js?v=20261109-feyz-2"></script>
+<script src="js/telemetry.js?v=20261014-study-1"></script>
+<script src="js/agent.js?v=20261109-feyz-2"></script>
+<script src="js/independent-brand.js?v=20261031-sinaptik-1"></script>
+<script src="js/phone.js?v=20261109-feyz-2"></script>
+<script src="js/page.js?v=6"></script>
+<script src="js/selftest.js?v=5"></script>
+<script src="js/landing.js?v=20261031-sinaptik-1"></script>
+</body>
+</html>

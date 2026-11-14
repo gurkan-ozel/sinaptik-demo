@@ -1,0 +1,33 @@
+/* Only the ?brand=independent short preview receives this visual identity. */
+html[data-independent="true"] { --red:#49346f; --red-dark:#34234f; --ink:#2c2639; --ink2:#71677e; --bg:#fcfbff; --bg2:#f1edf7; --line:#e4dfed; --green:#3a754c; --warn:#866128; }
+html[data-independent="true"] body, html[data-independent="true"] #demo, html[data-independent="true"] .screen, html[data-independent="true"] .statusbar { background:#f8f6fc; }
+html[data-independent="true"] #demo>.wrap { width:100%; max-width:none; padding-inline:0; }
+html[data-independent="true"] #demo { padding:0; }
+html[data-independent="true"] .phone { width:100%; max-width:none; height:100vh; height:100dvh; border:0; border-radius:0; box-shadow:none; }
+html[data-independent="true"] .screen { padding-bottom:20px; }
+html[data-independent="true"] .top-nav { padding-top:18px; padding-bottom:14px; }
+html[data-independent="true"] .top-nav h2 { color:#49346f; font-weight:500; font-size:21px; letter-spacing:-.035em; }
+html[data-independent="true"] .agent-avatar { color:#74608d; background:#e9e2f2; }
+html[data-independent="true"] .statusbar { display:none; }
+html[data-independent="true"] .card { box-shadow:none; border:1px solid #e8e2f0; border-radius:17px; }
+html[data-independent="true"] .asistan-header { background:#49346f; }
+html[data-independent="true"] .asistan-body { background:linear-gradient(#f0eaf8,#fff 55%); }
+html[data-independent="true"] .cc-visual { background:linear-gradient(135deg,#49346f,#77638f); }
+html[data-independent="true"] .cc-brand { font-family:inherit; font-weight:500; letter-spacing:-.04em; }
+html[data-independent="true"] .contrast-tag { display:none !important; }
+html[data-independent="true"] .kisa-scenes { background:#f8f6fc; padding:8px 10px 10px; border-bottom:1px solid #e8e2f0; }
+html[data-independent="true"] .kisa-scene { border-radius:10px; font-size:11px; }
+html[data-independent="true"] .kisa-scene[aria-pressed="true"] { border-color:#60467f; color:#49346f; background:#eae2f3; box-shadow:none; }
+html[data-independent="true"] .kisa-start { background:#f0eaf7; border-color:#ded2eb; border-radius:12px; }
+html[data-independent="true"] .kisa-start-btn { background:#49346f; color:#fff; border-color:#49346f; font-size:12px; }
+html[data-independent="true"] .kisa-start-btn svg { fill:currentColor; }
+html[data-independent="true"] .btn.primary { background:#49346f; border-color:#49346f; }
+html[data-independent="true"] .btn.primary:hover { background:#34234f; }
+html[data-independent="true"] .btn.outline { border-color:#a999ba; color:#49346f; }
+html[data-independent="true"] .asistan-header, html[data-independent="true"] .chat-header { background:#49346f; }
+html[data-independent="true"] .asistan-body .btn.line-dark { border-color:#d9d0e5; }
+html[data-independent="true"] .home-nudge { background:#f0eaf7; border-color:#e0d5ed; }
+html[data-independent="true"] [data-kisa-group="near"] { color:#5b5b90; }
+html[data-independent="true"] .tour-tip { background:#fcfbff; border-color:#cfc3df; color:#34234f; }
+html[data-independent="true"] .tour-spot { border-color:#a78ac5; }
+@media (prefers-reduced-motion:reduce) { html[data-independent="true"] * { scroll-behavior:auto !important; } }

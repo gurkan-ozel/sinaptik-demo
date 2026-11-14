@@ -1,0 +1,98 @@
+/* Sinaptik independent fintech identity. Product themes are isolated from the landing page. */
+html[data-landing="true"] { --red:#34265c; --red-dark:#251b44; --ink:#282336; --ink2:#6a6575; --bg:#faf9f5; --bg2:#f0edf5; --line:#e2dfe8; }
+html[data-landing="true"] body { background:#faf9f5; }
+html[data-landing="true"] .legacy-prototype { display:none !important; }
+.landing-only[hidden], .landing-showcase { display:none !important; }
+html[data-landing="true"] .landing-showcase { display:grid !important; }
+#top:focus { outline:none; }
+.landing-skip { position:fixed; top:-90px; left:16px; z-index:100; padding:12px 20px; background:white; color:#34265c; }
+.landing-skip:focus { top:12px; }
+html[data-landing="true"] .wrap { width:min(1160px,90vw); }
+html[data-landing="true"] .nav { background:#faf9f5ee; border-bottom:1px solid #e5e0eb; }
+html[data-landing="true"] .nav-in { height:82px; gap:24px; }
+.landing-mark { display:inline-grid; place-items:center; width:34px; height:34px; border-radius:11px; background:#34265c; color:#e0f4bf; font-size:27px; line-height:1; }
+html[data-landing="true"] .brand { gap:10px; }
+html[data-landing="true"] .brand-name { color:#34265c; font-size:30px; font-weight:600; letter-spacing:-.05em; }
+html[data-landing="true"] .brand-tag { color:#6a6575; border:0; font-size:12px; padding-left:10px; }
+html[data-landing="true"] .links { gap:26px; }
+html[data-landing="true"] .links a { font-size:14px; }
+.landing-nav-cta { flex-shrink:0; }
+html[data-landing="true"] .btn { font-size:14px; min-height:48px; font-weight:500; }
+html[data-landing="true"] .btn.primary, html[data-landing="true"] .btn.white { background:#34265c; color:#fff; border-color:#34265c; }
+html[data-landing="true"] .btn.primary:hover, html[data-landing="true"] .btn.white:hover { background:#4c3b7a; }
+html[data-landing="true"] .hero { background:#eee9f6; color:#282336; padding:82px 0 84px; position:relative; }
+.landing-hero-grid { display:grid; grid-template-columns:1.25fr 1fr; align-items:center; gap:80px; }
+.landing-hero-grid .kicker { display:inline-flex; align-items:center; gap:8px; color:#554273; text-transform:none; letter-spacing:.01em; font-size:13px; font-weight:500; opacity:1; margin-bottom:24px; }
+.landing-hero-grid .kicker:before { content:""; width:7px; height:7px; border-radius:50%; background:#7a58a1; }
+.landing-hero-grid h1 { font-size:clamp(44px,5.3vw,76px); line-height:1.06; font-weight:500; letter-spacing:-.045em; max-width:11em; }
+.landing-hero-grid h1 em { font-style:normal; color:#78619f; }
+.landing-hero-grid .lead { font-size:18px; font-weight:400; color:#645c72; max-width:29em; margin-top:26px; line-height:1.65; }
+.landing-hero-grid .hero-actions { align-items:center; gap:24px; margin-top:30px; }
+.landing-hero-grid .btn { gap:22px; }
+.landing-text-link { display:inline-flex; align-items:center; gap:12px; min-height:44px; color:#34265c; text-underline-offset:5px; font-size:14px; }
+.landing-hero-note { margin-top:19px; font-size:12px; color:#6a6278; }
+.landing-hero-video { min-width:0; }
+#landing-brand-video { display:block; width:100%; height:auto; aspect-ratio:16/9; object-fit:contain; border-radius:16px; background:#e6e8dd; }
+#landing-brand-video:focus-visible { outline:3px solid #8572ae; outline-offset:4px; }
+html[data-landing="true"] .section { padding:88px 0; }
+html[data-landing="true"] h2 { font-size:clamp(30px,3.3vw,44px); line-height:1.15; font-weight:400; letter-spacing:-.035em; }
+html[data-landing="true"] .eyebrow { color:#78619f; font-size:11px; font-weight:500; letter-spacing:.12em; margin-bottom:16px; }
+html[data-landing="true"] .intro { font-size:17px; }
+.landing-features { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:24px; margin-top:42px; }
+.landing-features article { padding:24px 22px 28px; border-radius:16px; background:#f0edf5; }
+.landing-features article:nth-child(even) { background:#eef1e9; }
+.landing-feature-number { color:#76648e; font-size:10px; font-weight:500; letter-spacing:.04em; }
+.landing-features h3 { font-weight:500; font-size:21px; line-height:1.3; margin:22px 0 12px; letter-spacing:-.02em; }
+.landing-features p,.landing-steps p { color:#6a6575; font-size:14px; }
+html[data-landing="true"] #nasil-calisir { background:#faf9f5; border-top:1px solid #e6e2e9; }
+.landing-steps { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:48px; list-style:none; padding:0; margin-top:38px; }
+.landing-steps li>span { display:inline-grid; place-items:center; width:34px; height:34px; background:#e6e0ef; border-radius:50%; color:#554273; font-size:14px; }
+.landing-steps h3 { margin:16px 0 10px; font-size:21px; font-weight:500; }
+.landing-section-cta { display:flex; align-items:center; gap:20px; flex-wrap:wrap; margin-top:38px; }
+.landing-section-cta .btn { gap:24px; }.landing-section-cta>span { font-size:13px; color:#6a6575; }
+html[data-landing="true"] #demo { background:#eae5f2; }
+.landing-preview-note { max-width:60em; margin-top:16px; color:#756a84; font-size:12px; }
+.landing-showcase { grid-template-columns:1fr 440px; align-items:center; gap:90px; margin-top:50px; }
+.landing-demo-tag { color:#7d6b96; font-size:10px; letter-spacing:.1em; }
+.landing-demo-copy h3 { font-size:38px; font-weight:400; line-height:1.16; letter-spacing:-.025em; margin:24px 0 20px; }
+.landing-demo-copy>p { color:#6c617d; font-size:16px; max-width:26em; }
+.landing-demo-points { margin:26px 0; display:grid; gap:12px; font-size:14px; }
+.landing-demo-points span { display:inline-block; width:65px; font-size:11px; color:#89769e; }
+.landing-demo-copy .landing-demo-disclaimer { font-size:12px; margin-bottom:26px; }
+.landing-device { border:1px solid #d3cadd; border-radius:28px; background:#faf9fd; padding:10px; overflow:hidden; box-shadow:0 20px 44px #34265c12; }
+.landing-device-top { display:flex; justify-content:space-between; align-items:center; padding:9px 14px 15px; font-size:12px; color:#6a5b7c; }
+.landing-device-top>span:first-child { color:#34265c; font-size:17px; font-weight:500; }
+.landing-device-top>span:last-child { display:flex; align-items:center; gap:6px; font-size:10px; }
+.landing-device-top i { width:5px; height:5px; background:#729667; border-radius:50%; }
+#landing-short-preview { display:block; width:100%; height:800px; border:0; border-radius:16px; background:#f8f7fc; }
+.landing-faq-layout { display:grid; grid-template-columns:.8fr 1.2fr; gap:72px; }
+.landing-faq { border-top:1px solid #e2dfe8; }
+.landing-faq details { border-bottom:1px solid #e2dfe8; padding:19px 0; }
+.landing-faq summary { cursor:pointer; font-size:17px; font-weight:400; padding-right:10px; }
+.landing-faq details p { color:#6a6575; font-size:14px; margin-top:14px; max-width:42em; }
+.landing-research { background:#f0edf5; padding:24px 0; font-size:13px; color:#746b80; }
+.landing-research b { color:#34265c; font-weight:500; }
+.landing-signup { background:#e5efdc; }
+.landing-signup-grid { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+.landing-signup-note { margin-top:24px; font-size:13px; color:#65755c; }
+.landing-form { padding:30px; border:1px solid #d0dcc5; border-radius:20px; background:#fafcf8; }
+.landing-form>label:first-child { font-size:14px; font-weight:500; display:block; margin-bottom:8px; }
+.landing-form input[type="email"] { display:block; width:100%; min-width:0; border:1px solid #c2cbb9; background:white; border-radius:9px; padding:13px 14px; font:inherit; font-size:16px; }
+.landing-consent { display:flex; align-items:flex-start; gap:10px; margin:20px 0; font-size:12px; color:#61685b; cursor:pointer; }
+.landing-consent input { width:18px; height:18px; flex-shrink:0; margin:1px 0 0; accent-color:#34265c; }
+.landing-form .btn { width:100%; gap:28px; }.landing-form .btn:disabled { cursor:wait; opacity:.65; }
+#early-access-privacy { margin-top:16px; font-size:11px; color:#747b6d; }#early-access-status { font-size:13px; }
+#early-access-status:not(:empty) { margin-top:18px; padding:12px 14px; border-radius:8px; background:#f0edf5; }
+#early-access-status[data-state="success"] { color:#32532d; background:#dfedd6; }#early-access-status[data-state="error"] { color:#9c200b; background:#fff0eb; }
+html[data-landing="true"] .footer { background:#faf9f5; border-top:1px solid #e2dfe8; padding:35px 0; }
+.landing-footer-brand { display:flex; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:18px; }.landing-footer-brand b { font-size:26px; color:#34265c; font-weight:500; }
+.landing-footer-brand>span:last-child { font-size:12px; color:#6a6575; margin-left:8px; }
+.landing-form :focus-visible,.landing-faq summary:focus-visible,.landing-text-link:focus-visible,.landing-nav-cta:focus-visible { outline:3px solid #8572ae; outline-offset:4px; }
+@media(max-width:1100px) { .nav:has(.landing-nav-cta) .brand-tag { display:none; }.landing-hero-grid { gap:40px; }.landing-features { grid-template-columns:repeat(2,minmax(0,1fr)); }.landing-showcase { gap:45px; grid-template-columns:1fr 400px; } }
+@media(max-width:800px) { .landing-hero-grid,.landing-signup-grid,.landing-faq-layout { grid-template-columns:1fr; gap:42px; }html[data-landing="true"] .hero { padding:50px 0 60px; }.landing-hero-grid h1 { font-size:clamp(44px,9vw,66px); }.landing-hero-grid .lead { font-size:17px; }.landing-steps { gap:24px; }.landing-showcase { grid-template-columns:1fr; gap:35px; }.landing-device { width:min(440px,100%); justify-self:center; }.landing-demo-copy h3 { font-size:32px; }.landing-faq-layout { gap:28px; }.landing-nav-cta { min-height:40px!important; padding-inline:14px; font-size:12px!important; } }
+@media(max-width:520px) { html[data-landing="true"] .section { padding:58px 0; }html[data-landing="true"] .nav-in { height:68px; gap:10px; }.landing-hero-grid .hero-actions { gap:10px 24px; }.landing-features { gap:14px; }.landing-features article { padding:20px 16px; }.landing-features h3 { font-size:19px; }.landing-features p { font-size:13px; }.landing-steps { grid-template-columns:1fr; gap:26px; }.landing-steps li { display:grid; grid-template-columns:34px 1fr; gap:0 16px; }.landing-steps h3 { margin:2px 0 6px; }.landing-steps p { grid-column:2; }.landing-form { padding:22px; }.landing-signup-grid { gap:28px; }.landing-device { padding:5px; border-radius:20px; }#landing-short-preview { height:780px; }.landing-device-top { padding:10px; }.landing-demo-points { font-size:13px; } }
+@media(max-width:360px) { .landing-features { grid-template-columns:1fr; }.brand:has(.landing-mark) { gap:7px; }.landing-nav-cta { padding-inline:11px; }.landing-mark { width:29px; height:29px; }.landing-hero-grid h1 { font-size:43px; } }
+
+/* Keep the longer Sinaptik name within the mobile navigation. */
+@media(max-width:520px) { html[data-landing="true"] .brand-name { font-size:26px; } }
+@media(max-width:360px) { html[data-landing="true"] .brand-name { font-size:24px; } }
