@@ -84,7 +84,7 @@
   }
   function shell() {
     el("screen").innerHTML =
-      '<div class="top-nav"><button class="agent-icon" type="button" id="detail-back" aria-label="Ana sayfaya dön" hidden>←</button><h2 id="screen-title" tabindex="-1">Akbank Mobil</h2><button class="top-chat-btn" type="button" id="open-assistant-chat" aria-label="Asistan ile sohbet"><svg class="assistant-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-6 4V6a2 2 0 0 1 2-2Z"/><path d="M7 9h10M7 13h7"/></svg> Asistan</button><span class="agent-avatar" aria-hidden="true">E</span></div>' +
+      '<div class="top-nav"><button class="agent-icon" type="button" id="detail-back" aria-label="Ana sayfaya dön" hidden>←</button><h2 id="screen-title" tabindex="-1">Akbank Mobil</h2><button class="top-chat-btn" type="button" id="open-assistant-chat" aria-label="Asistan ile sohbet"><svg class="assistant-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-6 4V6a2 2 0 0 1 2-2Z"/><path d="M7 9h10M7 13h7"/></svg> Asistan</button><span class="agent-avatar" aria-hidden="true">D</span></div>' +
       // 18 Ekim: sonuç mesajı sayfanın altında kalıyordu; başlığın altında, kaydırınca da görünür.
       '<p id="agent-message" class="agent-message" role="status" aria-live="polite"></p>' +
       // Başlık + sonuç mesajı sırası korunur (18 Ekim testi); gizli evre çubuğu mesajın altında.
@@ -102,7 +102,7 @@
       '<div id="transfer-share-status" class="transfer-share-status" role="status" aria-live="polite" hidden></div></div>' +
       '<div id="transfer-review-preview" class="human-review-panel" hidden><div class="human-review-header"><p class="eyebrow">Temsilci Özeti · İnsan Desteği</p><button type="button" class="human-review-close-btn" id="transfer-review-close" aria-label="Özeti kapat">×</button></div><p class="human-review-disclaimer">Asistan bu özeti transfer verilerinden hazırladı. İstemediğin bilgileri silebilir veya düzenleyebilirsin.</p><div class="review-fields"><div class="review-field-group"><label for="transfer-review-question">1. Sorun ve istediğin yardım</label><textarea id="transfer-review-question" class="review-textarea" rows="2"></textarea></div><div class="review-field-group"><label for="transfer-review-operation">2. İlgili işlem ve tutar</label><input type="text" id="transfer-review-operation" class="review-input"></div><div class="review-field-group"><label for="transfer-review-verified">3. Kesin olarak doğrulanmış durum</label><textarea id="transfer-review-verified" class="review-textarea" rows="2"></textarea></div><div class="review-field-group"><label for="transfer-review-uncertainty">4. Yapılan kontroller ve belirsiz kalan konu</label><textarea id="transfer-review-uncertainty" class="review-textarea" rows="2"></textarea></div><div class="review-field-group"><label for="transfer-review-summary">Temsilciye gösterilecek hazır özet (düzenlenebilir)</label><textarea id="transfer-review-summary" class="review-summary-box" rows="3"></textarea></div></div><div class="human-review-actions"><button type="button" class="btn primary pill small" id="transfer-review-save">Özet taslağını kaydet</button><button type="button" class="btn line-dark pill small" id="transfer-review-cancel">Kapat</button></div><div id="transfer-review-status" class="human-review-status" role="status" aria-live="polite" hidden></div></div></div>' +
       '<div id="refund-notice" class="refund-notice" tabindex="-1" hidden><div class="refund-notice-main"><p id="refund-notice-copy" role="status" aria-live="polite" aria-atomic="true"></p><button type="button" class="btn line-dark small pill" id="refund-notice-close">Kapat</button></div></div>' +
-      '<div id="home-view" class="screen-in">' + '<div class="hello"><p class="sub">Merhaba Elif</p><p class="date" id="home-date">12 Ekim 2026</p></div>' +
+      '<div id="home-view" class="screen-in">' + '<div class="hello"><p class="sub">Merhaba Deniz</p><p class="date" id="home-date">12 Ekim 2026</p></div>' +
       '<section id="near-era-card" class="guard-card near-era-card" aria-labelledby="near-era-title" hidden></section><section id="future-era-card" class="guard-card future-era-card" aria-labelledby="future-era-title" hidden></section>' +
       '<div class="balance-card"><p class="eyebrow">Hesabındaki para</p><p class="amount" id="home-balance"></p><p class="agent-muted" id="home-forecast"></p><div class="home-alloc" id="home-alloc" hidden></div><button type="button" class="nudge-link home-cashflow-link" id="home-cashflow">Ay sonuna kadar <span aria-hidden="true">→</span></button></div>' +
       '<nav class="quick-actions" id="home-quick-actions" aria-label="Hızlı işlemler"><button type="button" class="quick-action" id="home-new-transfer" hidden>Para gönder</button><button type="button" class="quick-action" id="home-scan-payment" hidden>Mesaj veya belgeden öde</button><button type="button" class="quick-action home-saved-transfer" id="home-saved-transfer">Kayıtlı transfer</button><button type="button" class="quick-action" id="home-payments">Ödemelerim</button></nav>' +
@@ -364,7 +364,7 @@
           ["Tutar", A.money(op.amount)],
           ["Tarih", dateStr],
           ["İşlem referansı", refStr],
-          ["Gönderen", "Elif Yılmaz"],
+          ["Gönderen", "Deniz Yılmaz"],
           ["Alıcı", payeeStr],
           ["Alıcı IBAN", ibanStr]
         ]);
@@ -990,7 +990,7 @@
 
   function initChatMessages() {
     if (!presentation.features.chat && view.chatMode === "expense") return;
-    if (!view.chatMessages || !view.chatMessages.length) view.chatMessages = [{ sender: "assistant", text: "Merhaba Elif. Bugün neye bakalım?", chips: chatTaskChoices(A.agent.getSnapshot()) }];
+    if (!view.chatMessages || !view.chatMessages.length) view.chatMessages = [{ sender: "assistant", text: "Merhaba Deniz. Bugün neye bakalım?", chips: chatTaskChoices(A.agent.getSnapshot()) }];
     else if (view.chatMessages.length === 1) view.chatMessages[0].chips = chatTaskChoices(A.agent.getSnapshot());
   }
 
@@ -2197,7 +2197,7 @@
       var a = AGENTS[mode], st = agentStatus(mode);
       return '<li><button type="button" class="era-inbox-row" data-guard-action="future-open-' + mode + '">' + eraIcon(a.icon, mode === "budget" ? "tone-teal" : "tone-red") +
         '<span class="era-teaser-text"><b>' + a.name + ' · ' + a.amount + '</b><span class="era-status ' + st[1] + '">' + A.escape(st[0]) + '</span>' +
-        (mode === "budget" && !(f.budget.sent && f.budget.choice !== "travel") ? '<span class="era-inbox-price"><svg viewBox="0 0 24 24" aria-hidden="true">' + ERA_ICONS.eyeoff + '</svg>Fiyat kalkanı · −1.900 TL</span>' : '') + '</span><span class="era-teaser-go" aria-hidden="true">›</span></button></li>';
+        (mode === "budget" && !presentation.kisa && !(f.budget.sent && f.budget.choice !== "travel") ? '<span class="era-inbox-price"><svg viewBox="0 0 24 24" aria-hidden="true">' + ERA_ICONS.eyeoff + '</svg>Fiyat kalkanı · −1.900 TL</span>' : '') + '</span><span class="era-teaser-go" aria-hidden="true">›</span></button></li>';
     }).join("") + '</ul>';
   }
   function agentsPanelHtml() {
@@ -2256,8 +2256,8 @@
     var travelOn = !!f.agents.travel, ruleOn = !!era.near.ruleBuffer, travel = b.choice === "travel";
     var titles = { "": "Bilet mi, bu ayki birikimin mi?", travel: ruleOn ? "Bilet alınır, bu ay 16.000 TL biriktirirsin" : "Bilet alınır, vadesizin 0 TL'ye iner", save: "Bilet alınmaz, birikim hedefin korunur" };
     html += '<div class="era-agent">' + eraIcon("plane", "tone-teal") + '<div><b>Seyahat Ajanı · uçak bileti</b><span>Ödeme günü 24 Ekim</span></div></div>' +
-      (b.sent && !travel ? '' : priceWasHtml(b)) + '<p class="amount era-amount">28.000 TL</p><h3 id="future-era-title" tabindex="-1">' + titles[b.step === 2 || b.sent ? b.choice : ""] + '</h3>' +
-      (b.priceOpen && !(b.sent && !travel) ? priceHtml() : '');
+      (b.sent && !travel || presentation.kisa ? '' : priceWasHtml(b)) + '<p class="amount era-amount">28.000 TL</p><h3 id="future-era-title" tabindex="-1">' + titles[b.step === 2 || b.sent ? b.choice : ""] + '</h3>' +
+      (b.priceOpen && !presentation.kisa && !(b.sent && !travel) ? priceHtml() : '');
     var summary = travel ? rows(ruleOn ? [["Ödeme gününde nereden", "ALE Fonu 28.000 TL"], ["Bu ay birikimin", "16.000 TL · hedef 28.000 TL düşer"], ["24 Ekim'de vadesiz", "20.000 TL · ödemelerin ve payın yerinde"]] : [["Ödeme gününde nereden", "Vadesiz 20.000 TL + ALE Fonu 8.000 TL"], ["Bu ay birikimin", "36.000 TL · hedef 8.000 TL düşer"], ["24 Ekim'de vadesiz", "0 TL · kalan ödemelerin ve payın karşılanmaz"]])
       : rows([["Seyahat Ajanı", "Bu bileti almaz · yeni bir seçenek bulursa yeniden sorar"], ["Bu ay birikimin", "44.000 TL · hedefin korunur"]]);
     if (b.sent) return html + summary + stepDots(2, 2, true) + sentText(travel ? "Bilete öncelik verildi · 28.000 TL" : "Birikimin korundu · bilet alınmadı") +
@@ -2480,7 +2480,7 @@
     // fiyat kalkanı fiyatı korudu → ajan birikim planına da bakar → karar sende → önce sonucu gör, sonra onayla.
     budget: [
       { sel: ["#future-era-card .era-agent", "#future-era-card .era-amount"], text: "Ajanın senin için bilet buldu. Sana sormadan ödemez.", next: true },
-      { sel: ["#future-era-card .era-price-was", "#future-price-panel"], tap: "#future-price", text: "Fiyat kalkanı: satıcı bütçeni görmez. Dokun, farkı gör.", after: "Bütçen gizli kaldı, fiyat düştü.", until: function () { return !!q("#future-price-panel"); } },
+      // 18 Kasım (sahip): kısa akışta fiyat farkı rakamı yok (ölçülmemiş tasarruf gibi okunuyordu); ilke KYA satırında "paylaşılmadı" olarak kalır.
       { sel: "#future-era-card .era-checks .era-impact", text: "Ajan fiyata da bakar, birikim planına da.", next: true },
       { sel: "#future-era-card .guard-actions.era-equal", text: "Bilet mi, birikim mi? Karar sende.", until: function () { return era.future.budget.step === 2; } },
       { sel: ["#future-era-card .rows", "#future-era-card .guard-actions"], tap: "#future-budget-confirm", text: "Önce sonucu gör, sonra onayla.", until: function () { return era.future.budget.sent; } },
@@ -2511,6 +2511,30 @@
   function tourEls(step) {
     if (typeof step.sel === "function") return step.sel().filter(Boolean);
     return [].concat(step.sel || []).map(q).filter(Boolean);
+  }
+  // 18 Kasım (sahip): jüri canlı kısa sürümünde birikim ürünü genel adla, "birikim hesabı". Sunum varsayılanı günlük faizli
+  // mevduat diyor, ekranda belirli bir fon (ALE) görünmesin. Yalnız metin; motor, tutarlar ve varsayılan jüri görünümü aynı.
+  var KISA_COPY = [
+    [/^Örnek fon: .+$/, "Birikim hesabın"],
+    [/Kalanı ALE fonuna/g, "Kalanı birikim hesabına"], [/sınırına kadar ALE fonuna ayır/g, "sınırına kadar birikim hesabına ayır"],
+    [/kurallarınla ALE fonuna ayrıldı/g, "kurallarınla birikim hesabına ayrıldı"], [/ ALE fonuna geçer/g, " birikim hesabına geçer"],
+    [/ALE fonundan vadesize/g, "birikim hesabından vadesize"], [/^ALE fonuna$/, "Birikim hesabına"], [/ALE Fonu /g, "Birikim hesabı "],
+    [/Birikim fonuna aktarıldı/g, "Birikim hesabına aktarıldı"], [/Birikim fonundan vadesize/g, "Birikim hesabından vadesize"],
+    [/Birikim fonun\b/g, "Birikim hesabın"], [/ fonuna eklendi\./g, " birikim hesabına eklendi."], [/^Fonunda şimdi/, "Birikim hesabında şimdi"],
+    [/Birikim \(fon\):/g, "Birikim:"], [/Birikim fona, /g, "Kalan birikime, "], [/Fon bakiyende/g, "Birikim bakiyende"],
+    [/eksik kısım fondan/g, "eksik kısım birikimden"], [/eksik kısmı fondan/g, "eksik kısmı birikimden"], [/^Fondan /, "Birikimden "],
+    [/Payını fondan/g, "Payını birikimden"], [/bilet fondan ödenir/g, "bilet birikimden ödenir"], [/İstersen fondan/g, "İstersen birikimden"],
+    [/(’s[iı]|’y[iı]) fonundan/g, "$1 birikiminden"], [/Fona para ayrılmaz/g, "Birikime para ayrılmaz"], [/ fona ekle/g, " birikime ekle"]
+  ];
+  function kisaCopy() {
+    if (!presentation.kisa) return;
+    var fix = function (v) { return KISA_COPY.reduce(function (t, r) { return t.replace(r[0], r[1]); }, v); };
+    [el("phone"), el("tour")].forEach(function (root) {
+      if (!root) return;
+      var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), n;
+      while ((n = w.nextNode())) { var t = fix(n.nodeValue); if (t !== n.nodeValue) n.nodeValue = t; }
+      root.querySelectorAll("[aria-label]").forEach(function (e) { var a = e.getAttribute("aria-label"), b = fix(a); if (b !== a) e.setAttribute("aria-label", b); });
+    });
   }
   function tourStart(key) {
     if (!TOURS[key] || !el("tour")) return;
@@ -2544,6 +2568,7 @@
     el("tour-contact").hidden = !contact;
     el("tour-skip").hidden = contact;
     tip.classList.toggle("has-contact", contact);
+    kisaCopy();
     if (A.applyIndependentBrand) A.applyIndependentBrand();
     el("tour-next").hidden = !(step.next || tour.held); el("tour-next").textContent = last ? "Bitir" : "İleri";
     tip.classList.remove("is-in"); void tip.offsetWidth; tip.classList.add("is-in");
@@ -2755,7 +2780,7 @@
     render(A.agent.getSnapshot());
   }
   function bindEra() {
-    // "E" avatarı görünümünü korur; tek dokunuş hiçbir şey yapmaz, 1,2 sn içinde üç dokunuş gizli çubuğu açar/kapatır.
+    // 18 Kasım (sahip): persona Deniz, avatar "D". Avatar görünümünü korur; tek dokunuş hiçbir şey yapmaz, 1,2 sn içinde üç dokunuş gizli çubuğu açar/kapatır.
     document.querySelector(".top-nav .agent-avatar").addEventListener("click", function () {
       var now = Date.now();
       era.taps = era.taps.filter(function (t) { return now - t < 1200; }).concat(now);
@@ -3139,6 +3164,7 @@
     var noticeSays = !el("transfer-notice").hidden && el("transfer-notice-copy").textContent === view.message;
     text("agent-message", view.message); el("agent-message").hidden = !view.message || noticeSays;
     el("agent-message").classList.toggle("is-flash", !!view.message && !!view.messageFlash);
+    kisaCopy();
     if (A.applyIndependentBrand) A.applyIndependentBrand();
     var announcement = def.title + ": " + statusNames[t.status];
     if (announcement !== lastStatus) { text("agent-live", announcement); lastStatus = announcement; }

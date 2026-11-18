@@ -4,7 +4,7 @@ window.ARTI = window.ARTI || {};
   "use strict";
   A.APP_NAME = "Sinaptik";
   A.CONFIG = Object.assign({ date: "2026-10-12T09:00:00+03:00", horizon: "2026-10-31", toolDelayMs: 180, transferUndoMs: 5000, quoteTtlMs: 120000, startingCash: 9200000, useLegacyStartingCash: false }, A.CONFIG || {});
-  A.USER = { name: "Elif", today: "12 Ekim 2026" };
+  A.USER = { name: "Deniz", today: "12 Ekim 2026" };
   A.N = 20;
   A.RESEARCH = {
     source: "Kullanıcı görüşmeleri · n=20 (ilk 12 XLSX, son 8 DOCX · katılımcı bazında kodlandı)", sourceType: "Nitel görüşme tema sayımı",
@@ -90,7 +90,7 @@ window.ARTI = window.ARTI || {};
     cardStatement: { total: 3600000, cardLimit: 8000000, minimumBps: { upTo100k: 2000, above: 4000 }, monthlyRateBps: 325, taxBps: 3000,
       issued: "2026-10-12", due: "2026-10-22", nextCut: "2026-11-12", nextDue: "2026-11-22", source: "https://www.bddk.org.tr/Mevzuat/Liste/56",
       // 22 Ekim (sahip: "çok basic kalmış"): Kredi kartım ekranı. Kurgusal kart; dönem harcamaları 36.000 TL'yi oluşturur.
-      last4: "4821", holder: "ELİF", previous: { period: "Eylül", total: 1884000, paidOn: "2026-09-22" },
+      last4: "4821", holder: "DENİZ", previous: { period: "Eylül", total: 1884000, paidOn: "2026-09-22" },
       items: [
         { date: "2026-09-14", merchant: "Migros", category: "Market", amount: 486000 },
         { date: "2026-09-18", merchant: "Shell", category: "Akaryakıt", amount: 420000 },

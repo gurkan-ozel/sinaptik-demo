@@ -1774,7 +1774,7 @@
         operationId: op.id,
         reference: op.receipt.reference,
         amount: op.amount,
-        sender: "Elif Yılmaz",
+        sender: "Deniz Yılmaz",
         payee: (tpl && tpl.payee) || (op.receipt && op.receipt.payee) || op.payeeLabel,
         recipientIban: (tpl && tpl.ibanMask) || (op.receipt && op.receipt.ibanMask) || "",
         note: note,
