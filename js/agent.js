@@ -312,24 +312,26 @@
     if (!sh || sh.flow !== "context") return null;
     if (sh.hold) return "hold";
     var a = sh.answers || {};
+    // 19 Kasım (Akbank fraud direktörü): en fazla üç soru, sırayla ve yalnız şüphe sürerse. 1 telefon görüşmesi, 2 gizlilik, 3 his ("kontrolün dışında mı").
     if (!a.directed) return "ask";
     if (a.directed === "no") return "approve";
-    if (a.directed === "unsure") return "verify";
-    if (!a.secrecy) return "ask";
-    return a.secrecy === "yes" ? "stop" : "verify";
+    if (a.directed === "yes") { if (!a.secrecy) return "ask"; if (a.secrecy === "yes") return "stop"; }
+    if (!a.feeling) return "ask";
+    return a.feeling === "yes" ? "stop" : "verify";
   }
   var CONTEXT_DENY = {
     ask: "Ek bilgi gerekiyor. Kısa soruları yanıtlamadan transfer gönderilmez.",
     verify: "Doğrulama gerekiyor. Bu transfer uygulamadan gönderilemez. Temsilciyle doğrulanmalı.",
-    stop: "İşlemi gizli tutma isteği bildirildi. Bu transfer gönderilmez.",
+    stop: "Cevapların bir yönlendirmeye işaret ediyor. Bu transfer gönderilmez.",
     hold: "Bu alıcıya transfer doğrulama bekliyor. Cevap veya bekleme bu kararı kaldırmaz.",
-    holdOther: "Biri seni yönlendiriyor dedin. Doğrulanana kadar yeni alıcıya transfer gönderilmez. Kayıtlı alıcıların ve ödemelerin açık."
+    holdOther: "Telefonla yönlendirildiğini söyledin. Doğrulanana kadar yeni alıcıya transfer gönderilmez. Kayıtlı alıcıların ve ödemelerin açık."
   };
   var ANSWER_WORD = { yes: "Evet", no: "Hayır", unsure: "Emin değilim" };
-  var CONTEXT_QUESTIONS = { directed: "Bu parayı göndermen için biri seni yönlendiriyor mu?", secrecy: "Bu kişi işlemi gizli tutmanı istedi mi?" };
+  var CONTEXT_QUESTIONS = { directed: "Bir telefon görüşmesi yüzünden mi bu işlemi yapıyorsun?", secrecy: "Biri bunu gizli tutmanı istedi mi?", feeling: "Bu işlemi kendi kontrolünde yapmıyormuş gibi hissediyor musun?" };
+  function nextQuestion(a) { return !a.directed ? "directed" : a.directed === "yes" && !a.secrecy ? "secrecy" : "feeling"; }
   // Soru ve cevap metinleri tek yerde: telefon görünümü de bunları kullanır.
   A.SHIELD_CONTEXT = Object.freeze({ questions: Object.freeze(Object.assign({}, CONTEXT_QUESTIONS)), answers: Object.freeze(Object.assign({}, ANSWER_WORD)),
-    short: Object.freeze({ directed: "Biri yönlendiriyor mu", secrecy: "Gizli tutmanı istedi mi" }) });
+    short: Object.freeze({ directed: "Telefon görüşmesi yüzünden mi", secrecy: "Gizli tutmanı istedi mi", feeling: "Kontrolün dışında mı hissediyorsun" }), next: nextQuestion });
   var own = Object.prototype.hasOwnProperty;
   // Doğrulama/durdurma kararı alıcıya bağlanır. Tam IBAN saklanmaz: son dört hane (maske) ve geri çevrilemez kısa bir parmak izi tutulur.
   // İki tarafta da parmak izi varsa o karşılaştırılır (aynı son dört haneli başka alıcı kararı devralmaz); yoksa maske yeter (temkinli taraf).
@@ -1345,7 +1347,7 @@
     if (flow === "context" && (risk.level === "high" || held || heldOther)) {
       state.shield = { id: id("SHIELD"), planId: p.id, flow: "context", status: "active", score: risk.score, level: risk.level,
         signals: risk.signals.filter(function (x) { return x.active; }).map(function (x) { return x.code; }), risk: clone(risk),
-        payee: payee, recipientIban: iban, recipientKey: ibanKey, amount: c.amount, answers: { directed: null, secrecy: null }, answer: null,
+        payee: payee, recipientIban: iban, recipientKey: ibanKey, amount: c.amount, answers: { directed: null, secrecy: null, feeling: null }, answer: null,
         hold: held ? { shieldId: held.shieldId, outcome: held.outcome } : heldOther ? { shieldId: heldOther.shieldId, outcome: heldOther.outcome, otherPayee: true } : null, coolingUntil: null, autoCooling: false, startedAt: state.now, reviewReference: null };
       // Puan iç hesapta ve teknik kayıtta kalır; müşteri yolunda gösterilmez. Kaynaklar ayrışır: hesap hareketi ve işlem (banka), cevaplar (müşteri), arama (senaryo).
       audit("transfer", "shield", held ? "Bu alıcı için doğrulama kararı sürüyor; transfer gönderilmedi" : heldOther ? "Müşteri yönlendirildiğini bildirdi; yeni alıcıya transfer gönderilmedi" : "Demo banka kuralı ek bağlam istedi; transfer gönderilmedi",
@@ -1443,11 +1445,11 @@
     var o = shieldOutcome(sh), lock = state.protection.newPayeeLocked && state.protection.shieldId === sh.id ? " Yeni alıcı koruması müşterinin seçimiyle açıldı (" + state.protection.reference + ")." : "";
     if (sh.status === "cancelled") return "İptal edildi. Gönderilmedi, para hesapta. Yalnız bu transfer iptal edildi." + (o === "verify" || o === "hold" ? " İptalden önce doğrulama gerekiyordu." : o === "stop" ? " İptalden önce işlem durdurulmuştu." : "") + lock;
     return { ask: "Gönderilmedi. Ek bilgi bekleniyor.", approve: "Gönderilmedi. Müşteri onayı bekleniyor.", verify: "Gönderilmedi. Doğrulama gerekiyor, uygulamadan gönderilemez.",
-      stop: "Gönderilmedi. İşlemi gizli tutma isteği bildirildi, transfer durduruldu.", hold: "Gönderilmedi. Bu alıcıya transfer doğrulama bekliyor." }[o] + lock;
+      stop: "Gönderilmedi. Cevapların bir yönlendirmeye işaret ediyor, transfer durduruldu.", hold: "Gönderilmedi. Bu alıcıya transfer doğrulama bekliyor." }[o] + lock;
   }
   function contextReview(sh, note, reference) {
     var labels = (sh.risk.signals || []).filter(function (x) { return x.active; }).map(function (x) { return x.label; });
-    var answers = ["directed", "secrecy"].filter(function (q) { return sh.answers[q]; }).map(function (q) { return CONTEXT_QUESTIONS[q] + " " + ANSWER_WORD[sh.answers[q]]; });
+    var answers = ["directed", "secrecy", "feeling"].filter(function (q) { return sh.answers[q]; }).map(function (q) { return CONTEXT_QUESTIONS[q] + " " + ANSWER_WORD[sh.answers[q]]; });
     var operation = A.money(sh.amount) + " transfer talebi · " + sh.payee + " (" + sh.recipientIban + ")", status = contextStatus(sh);
     var uncertainty = "Gerekçeler\n• " + labels.join("\n• ") + (answers.length ? "\nMüşterinin cevapları\n• " + answers.join("\n• ") : "\nMüşterinin cevapları\n• Yanıtlanmadı");
     note = typeof note === "string" ? note.trim().slice(0, 600) : "";
@@ -1618,18 +1620,19 @@
       var shield = activeShield();
       if (!shield) return invalid("Etkin güvenlik kalkanı bulunmuyor.");
       if (shield.flow === "context") {
-        var qn = c.question || (shield.answers.directed ? "secrecy" : "directed"), was = shieldOutcome(shield);
+        var qn = c.question || nextQuestion(shield.answers), was = shieldOutcome(shield);
         if (typeof qn !== "string" || !own.call(CONTEXT_QUESTIONS, qn)) return invalid("Soru bulunamadı.");
         if (typeof c.answer !== "string" || !own.call(ANSWER_WORD, c.answer)) return invalid("Yanıt evet, hayır veya emin değilim olmalı.");
         if (shield.hold) return invalid(holdDenial(shield));
         // Cevaplar kilitlidir: aynı cevaba yinelenen dokunuş kayıt üretmez, farklı cevap kararı geri almaz.
         if (shield.answers[qn]) return shield.answers[qn] === c.answer ? { ok: true, unchanged: true, outcome: was } : invalid("Bu soru yanıtlandı. Yanıt değiştirilemez. Gerekirse bu transferi iptal et.");
-        if (qn === "secrecy" && shield.answers.directed !== "yes") return invalid("Bu soru yalnız biri seni yönlendiriyorsa sorulur.");
+        if (qn === "secrecy" && shield.answers.directed !== "yes") return invalid("Bu soru yalnız telefon görüşmesi varsa sorulur.");
+        if (qn === "feeling" && (shieldOutcome(shield) !== "ask" || nextQuestion(shield.answers) !== "feeling")) return invalid("Bu soru şu an sorulmuyor.");
         shield.answers[qn] = c.answer;
         var ansOutcome = shieldOutcome(shield);
         // "Evet" (biri yönlendiriyor) her durumda doğrulamaya ya da durdurmaya gider. Karar ikinci cevabı beklemeden alıcıya bağlanır:
         // iptal, yeni taslak veya sonradan verilen "Hayır" onu kaldırmaz (5 Kasım kod incelemesi). Gizlilik "Evet" ise karar durdurmaya yükselir.
-        var holdAs = ansOutcome === "stop" ? "stop" : ansOutcome === "verify" || shield.answers.directed === "yes" ? "verify" : null;
+        var holdAs = ansOutcome === "stop" ? "stop" : ansOutcome === "verify" || shield.answers.directed === "yes" || shield.answers.directed === "unsure" ? "verify" : null;
         if (holdAs) {
           var mine = state.reviewHolds.find(function (h) { return h.shieldId === shield.id; });
           if (mine) { if (holdAs === "stop") mine.outcome = "stop"; }

@@ -400,9 +400,8 @@
   // Ek bağlam akışı · özet: önce banka kaydı (işlem, durum, gerekçeler, müşterinin cevapları), sonra ayrı olarak müşterinin notu. Puan yok.
   function contextReadableHtml(draft) {
     var v = draft.values, c = draft.ctx || {}, word = A.SHIELD_CONTEXT.answers, short = A.SHIELD_CONTEXT.short;
-    var answers = [[short.directed, (c.answers || {}).directed], [short.secrecy, (c.answers || {}).secrecy]].filter(function (x) { return x[1]; });
-    var rs = (c.reasons || []).filter(function (x) { return KISA_REASON[x]; });
-    if (presentation.kisa && rs.indexOf("recent-redemption") >= 0) rs = rs.concat("panic-taps");
+    var answers = [[short.directed, (c.answers || {}).directed], [short.secrecy, (c.answers || {}).secrecy], [short.feeling, (c.answers || {}).feeling]].filter(function (x) { return x[1]; });
+    var rs = (c.reasons || []).filter(function (x) { return KISA_REASON[x] && (!presentation.kisa || CUSTOMER_SAFE[x]); });
     var chips = rs.map(function (x) { return '<li>' + KISA_REASON[x][0] + '</li>'; }).join("");
     return '<div><dt>İşlem</dt><dd>' + A.escape(v.operation) + '</dd></div><div><dt>Durum</dt><dd>' + A.escape(v.verified) + '</dd></div>' +
       (chips ? '<div><dt>Gerekçeler</dt><dd><ul class="review-chips">' + chips + '</ul></dd></div>' : '') +
@@ -1616,12 +1615,15 @@
   // Arama gerekçe değildir (başka telefondaki arama gözlenmez). Hiç gerekçe yoksa düğme yok: "olağan" gibi bir güvence de verilmez.
   var KISA_REASON = { "new-payee": ["Yeni alıcı", "Bu alıcıya daha önce para göndermedin."], "recent-redemption": ["Yakın birikim bozumu", "Son bir saatte birikiminden çektiğin para bu transferle çıkıyor."],
     "high-amount": ["Olağan dışı tutar", "Tutar, önceki transferlerine göre olağan dışı."], "repeat-new-payee": ["Art arda yeni alıcı", "Kısa sürede yeni alıcılara başka transferler de yapıldı."],
-    // 19 Kasım (sahip): ajan paranın yolunun yanında davranışa ve düşündüren sorunun cevabına da bakar. Prototip dokunuş ritmini ölçmez; senaryo gösterimi.
-    "panic-taps": ["Dokunuşlar hızlandı", "Bu işlemde ekrana her zamankinden hızlı dokunuyorsun."], "directed-yes": ["Yönlendirme: Evet", "İlk soruda biri seni yönlendirdiğini söyledin."] };
+    "ans-directed": ["Telefon görüşmesi: Evet", "Bir telefon görüşmesi yüzünden bu işlemi yaptığını söyledin."], "ans-secrecy": ["Gizlilik isteği: Evet", "Biri bunu gizli tutmanı istedi."],
+    "ans-feeling": ["Kontrol dışında: Evet", "Bu işlemi kendi kontrolünde yapmıyormuş gibi hissettiğini söyledin."] };
+  // 19 Kasım (Akbank fraud direktörü): tespit mekanizmasının tamamı müşteriye gösterilmez; gösterilirse dolandırıcı kurbanı ona göre yönlendirir
+  // (ör. "fonunu bozma", "yavaş dokun"). Müşteri yalnız dolandırıcının değiştiremeyeceği göstergeleri ve kendi cevaplarını görür.
+  // Birikim bozumu ve davranış sinyali ajanın içeride baktığı şeylerdir; müşteri ekranına ve müşterinin gördüğü özete yazılmaz.
+  var CUSTOMER_SAFE = { "new-payee": 1, "high-amount": 1, "repeat-new-payee": 1 };
   function kisaReasons(signals, answers) {
-    var on = signals.slice();
-    if (on.some(function (x) { return x.code === "recent-redemption"; })) on.push({ code: "panic-taps" });
-    if (answers && answers.directed === "yes") on.push({ code: "directed-yes" });
+    var on = signals.filter(function (x) { return CUSTOMER_SAFE[x.code]; });
+    ["directed", "secrecy", "feeling"].forEach(function (q) { if (answers && answers[q] === "yes") on.push({ code: "ans-" + q }); });
     return on;
   }
   function reasonStackHtml(risk, ctx, answers) {
@@ -1810,16 +1812,16 @@
     var state = cancelled ? "İptal edildi · para gönderilmedi" : o === "approve" ? "Gönderilmedi · onayın bekleniyor" : o === "verify" || o === "hold" ? "Gönderilmedi · uygulamadan gönderilemez" : "Gönderilmedi · paran hesabında";
     function answerBtn(q, v) { return '<button type="button" class="btn line-dark small pill guard-answer" data-guard-action="shield-ctx" data-q="' + q + '" data-a="' + v + '"' + (busyNow ? " disabled" : "") + '>' + word[v] + '</button>'; }
     function question(q, text) { return '<div class="guard-question" role="group" aria-labelledby="shield-q-' + q + '"><p id="shield-q-' + q + '">' + text + '</p><div class="guard-answer-row is-three">' + ["yes", "no", "unsure"].map(function (v) { return answerBtn(q, v); }).join("") + '</div></div>'; }
-    var answered = [a.directed && [C.short.directed, a.directed], a.secrecy && [C.short.secrecy, a.secrecy]].filter(Boolean);
+    var answered = [a.directed && [C.short.directed, a.directed], a.secrecy && [C.short.secrecy, a.secrecy], a.feeling && [C.short.feeling, a.feeling]].filter(Boolean);
     var body = '';
-    if (!cancelled && o === "ask") body = !a.directed ? question("directed", C.questions.directed) : question("secrecy", C.questions.secrecy);
+    if (!cancelled && o === "ask") { var nq = C.next(a); body = question(nq, C.questions[nq]); }
     if (answered.length && !(o === "ask" && !a.directed)) body = '<ul class="guard-answers" aria-label="Cevapların">' + answered.map(function (x) { return '<li>' + x[0] + ': <b>' + word[x[1]] + '</b></li>'; }).join("") + '</ul>' + body;
     var outcome = cancelled ? '<p class="guard-copy" id="shield-outcome">' + money + ' gönderilmedi. Yalnız bu transfer iptal edildi. ' + (a.directed === "yes" ? "Kayıtlı alıcıların ve ödemelerin açık. Yeni alıcıya doğrulamadan para gitmez." : "Diğer işlemlerin açık.") + '</p>' +
         '<p class="shield-steps-title">Şimdi:</p><ol class="shield-steps"><li>Seni yönlendiren biri varsa aramayı kapat.</li><li>Temsilciyi sen ara: <b>444 25 25</b></li><li>“Akbank’tan arıyoruz” denirse: Güvenlik Merkezi → “Beni arayan Akbank mı?”</li></ol>'
       : o === "approve" ? '<p class="guard-copy" id="shield-outcome">Cevabın kaydedildi. Göndermek senin onayında. Şüphe varsa iptal et.</p>'
       : o === "verify" ? '<p class="guard-copy" id="shield-outcome">Göndermeden önce bir temsilcinin seninle doğrulaması gerekiyor. Uygulamadan şu an gönderilemez. Temsilciyi sen ara: <b>444 25 25</b></p>'
       : o === "stop" ? '<p class="guard-alert" id="shield-outcome" role="alert">Gizli tutmanı isteyen biri var. Banka, polis ya da 112 senden para göndermeni ve bunu gizlemeni istemez. Bu transferi gönderme.</p>'
-      : o === "hold" ? '<p class="guard-copy" id="shield-outcome">' + (sh.hold && sh.hold.otherPayee ? "Biri seni yönlendiriyor dedin. Doğrulanana kadar yeni alıcıya para gitmez. Kayıtlı alıcıların ve ödemelerin açık." : "Bu alıcı için doğrulama istendi. Yeni cevap ya da bekleme bunu kaldırmaz.") + ' Temsilciyi sen ara: <b>444 25 25</b></p>' : '';
+      : o === "hold" ? '<p class="guard-copy" id="shield-outcome">' + (sh.hold && sh.hold.otherPayee ? "Telefonla yönlendirildiğini söyledin. Doğrulanana kadar yeni alıcıya para gitmez. Kayıtlı alıcıların ve ödemelerin açık." : "Bu alıcı için doğrulama istendi. Yeni cevap ya da bekleme bunu kaldırmaz.") + ' Temsilciyi sen ara: <b>444 25 25</b></p>' : '';
     var reviewBtn = '<button type="button" class="btn line-dark pill small" data-guard-action="shield-review" aria-expanded="' + String(!!view.shieldReviewOpen) + '" aria-controls="shield-review-panel">' + (view.shieldReviewOpen ? "Temsilci özetini gizle" : cancelled ? "Temsilci için özeti aç" : "Temsilci için özet hazırla") + '</button>';
     var protectOn = pr.newPayeeLocked, rel = s.protectionRelease || {};
     var protect = !cancelled ? '' : protectOn ? '<div class="shield-protect is-on" id="shield-protect"><p><b>Yeni alıcı koruması açık</b> · ' + A.escape(pr.reference || "") + '</p><p class="agent-muted guard-fineprint">Yeni alıcılara transfer kapalı. Kayıtlı alıcıların açık. ' +
@@ -2464,7 +2466,9 @@
         text: function () { if (ctxShieldOn()) return "Kalkan devrede. Para hesabında, transfer gönderilmedi."; var p = A.agent.getSnapshot().plans.transfer; return p && p.status === "succeeded" ? "Para gönderildi. Kalkan bu tutarda açılmadı." : "Bu tutarda kalkan açılmadı. Karar sende."; }, next: true },
       { skip: noCtxShield, sel: "#scam-shield .guard-question", tap: "#scam-shield .guard-answer-row", text: "Tek bir soru, bir nefes. Panik dağılır.", until: function () { return !!shieldAnswers().directed; } },
       { skip: function () { return noCtxShield() || shieldAnswers().directed !== "yes"; }, sel: "#scam-shield .guard-question", tap: "#scam-shield .guard-answer-row", text: "Bir soru daha, o kadar.", until: function () { return !!shieldAnswers().secrecy; } },
-      { skip: noCtxShield, sel: ["#scam-shield .guard-state", "#shield-outcome"], text: function () { return { stop: "Gizlilik isteği var. Transfer durdu.", verify: "Doğrulama gerekiyor. Uygulamadan gitmez.", approve: "Cevabın kaydedildi. Karar yine sende." }[(tourSnap || A.agent.getSnapshot()).shieldOutcome] || "Cevabın kaydedildi."; }, next: true },
+      // 19 Kasım: üçüncü soru (his) yalnız şüphe sürerse: telefon "Evet" ve gizlilik "Evet" değilse ya da telefon "Emin değilim".
+      { skip: function () { var x = shieldAnswers(); return noCtxShield() || !((x.directed === "yes" && x.secrecy && x.secrecy !== "yes") || x.directed === "unsure"); }, sel: "#scam-shield .guard-question", tap: "#scam-shield .guard-answer-row", text: "Son bir soru: nasıl hissediyorsun?", until: function () { return !!shieldAnswers().feeling; } },
+      { skip: noCtxShield, sel: ["#scam-shield .guard-state", "#shield-outcome"], text: function () { return { stop: shieldAnswers().secrecy === "yes" ? "Gizlilik isteği var. Transfer durdu." : "Kontrolün dışında hissediyorsun. Transfer durdu.", verify: "Doğrulama gerekiyor. Uygulamadan gitmez.", approve: "Cevabın kaydedildi. Karar yine sende." }[(tourSnap || A.agent.getSnapshot()).shieldOutcome] || "Cevabın kaydedildi."; }, next: true },
       { skip: noCtxShield, sel: "#scam-shield .shield-why", tap: "#scam-shield [data-risk-stack]", text: "Belirsizlik yok. Dokun, nedenini gör.", until: function () { return stackLvl("shield:") >= 1; } },
       { skip: noCtxShield, sel: "#scam-shield .shield-why", tap: "#scam-shield [data-risk-stack]", text: "Hüküm değil, bağlam. İstersen bir daha dokun.", after: "Hüküm değil, bağlam.", next: true, until: function () { return stackLvl("shield:") >= 2; } },
       { skip: noCtxShield, sel: '[data-guard-action="shield-cancel"]', text: "Kontrol sende. Bu transferi iptal et.", until: function () { var sh = (tourSnap || A.agent.getSnapshot()).shield; return !!sh && sh.status === "cancelled"; } },

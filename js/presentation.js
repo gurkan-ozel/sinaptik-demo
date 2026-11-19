@@ -11,7 +11,7 @@
   var kisa = profile === "jury" && params.get("kisa") === "1";
   A.presentation = Object.freeze({
     profile: profile,
-    build: "20261119-juri-3",
+    build: "20261119-juri-4",
     // 22 Ekim (PLAN_GELECEK_EVRELERI.md): gizli sunum evresi. Varsayılan "today" = jüri görünümünün kendisi; diğerleri yalnız ?era=, Alt+1/2/3 veya E avatarına üç dokunuşla.
     initialEra: ["near", "future"].includes(params.get("era")) ? params.get("era") : "today",
     kisa: kisa,
