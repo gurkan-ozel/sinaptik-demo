@@ -27,7 +27,7 @@
   var KISA_START = {
     birikim: { page: "home", title: "Birikim önerisi", copy: "Maaşın yattı. Sinaptik bu ay ne kadar ayırabileceğini hesapladı.", cases: [["birikim", "Senaryoyu başlat"]] },
     kalkan: { page: "home", title: "Dolandırıcılık", copy: "Başka telefonun çalıyor. Arayan kendini 112 olarak tanıtıyor.", cases: [["scam", "Senaryoyu başlat"]] },
-    kurallar: { page: "savings", badge: "Yakın gelecek · Demo", title: "Kurallarını sen koyarsın", copy: "Sinaptik ayı senin kurallarının içinde yürütür. Ay ortasında beklenmedik bir gider de gelecek.", cases: [["near", "Senaryoyu başlat"]] },
+    kurallar: { page: "savings", badge: "Yakın gelecek · Demo", title: "Kuralı ajan önerir, sen açarsın", copy: "Sinaptik seni tanıyıp sana özel kurallar önerir; açtıklarının içinde ayı yürütür. Ay ortasında beklenmedik bir gider de gelecek.", cases: [["near", "Senaryoyu başlat"]] },
     ajanlar: { page: "home", badge: "Ajanlar çağı · Vizyon demosu", title: "Ajanlar senin adına ödeme ister", copy: "Bir senaryo seç. Biri bitince sıradakini dene.", cases: [["budget"], ["kya"], ["spoof"]] }
   };
   // 29 Ekim (sahip): ajan senaryolarının adı ne olduğunu söylesin ("Seyahat ajanı" fiyat kalkanı olduğunu anlatmıyordu).
@@ -401,7 +401,9 @@
   function contextReadableHtml(draft) {
     var v = draft.values, c = draft.ctx || {}, word = A.SHIELD_CONTEXT.answers, short = A.SHIELD_CONTEXT.short;
     var answers = [[short.directed, (c.answers || {}).directed], [short.secrecy, (c.answers || {}).secrecy]].filter(function (x) { return x[1]; });
-    var chips = (c.reasons || []).filter(function (x) { return KISA_REASON[x]; }).map(function (x) { return '<li>' + KISA_REASON[x][0] + '</li>'; }).join("");
+    var rs = (c.reasons || []).filter(function (x) { return KISA_REASON[x]; });
+    if (presentation.kisa && rs.indexOf("recent-redemption") >= 0) rs = rs.concat("panic-taps");
+    var chips = rs.map(function (x) { return '<li>' + KISA_REASON[x][0] + '</li>'; }).join("");
     return '<div><dt>İşlem</dt><dd>' + A.escape(v.operation) + '</dd></div><div><dt>Durum</dt><dd>' + A.escape(v.verified) + '</dd></div>' +
       (chips ? '<div><dt>Gerekçeler</dt><dd><ul class="review-chips">' + chips + '</ul></dd></div>' : '') +
       '<div><dt>Cevapların</dt><dd>' + (answers.length ? '<ul>' + answers.map(function (x) { return '<li>' + x[0] + ': ' + word[x[1]] + '</li>'; }).join("") + '</ul>' : 'Yanıtlanmadı') + '</dd></div>' +
@@ -1613,9 +1615,17 @@
   // "Risk" dokunulabilir düğme kalır: 1 · bu işlemde gerçekten geçerli kısa gerekçeler → 2 · her birinin kısa cümlesi. Puan iç hesapta ve teknik kayıtta kalır.
   // Arama gerekçe değildir (başka telefondaki arama gözlenmez). Hiç gerekçe yoksa düğme yok: "olağan" gibi bir güvence de verilmez.
   var KISA_REASON = { "new-payee": ["Yeni alıcı", "Bu alıcıya daha önce para göndermedin."], "recent-redemption": ["Yakın birikim bozumu", "Son bir saatte birikiminden çektiğin para bu transferle çıkıyor."],
-    "high-amount": ["Olağan dışı tutar", "Tutar, önceki transferlerine göre olağan dışı."], "repeat-new-payee": ["Art arda yeni alıcı", "Kısa sürede yeni alıcılara başka transferler de yapıldı."] };
-  function reasonStackHtml(risk, ctx) {
-    var on = risk.signals.filter(function (x) { return x.active && KISA_REASON[x.code]; });
+    "high-amount": ["Olağan dışı tutar", "Tutar, önceki transferlerine göre olağan dışı."], "repeat-new-payee": ["Art arda yeni alıcı", "Kısa sürede yeni alıcılara başka transferler de yapıldı."],
+    // 19 Kasım (sahip): ajan paranın yolunun yanında davranışa ve düşündüren sorunun cevabına da bakar. Prototip dokunuş ritmini ölçmez; senaryo gösterimi.
+    "panic-taps": ["Dokunuşlar hızlandı", "Bu işlemde ekrana her zamankinden hızlı dokunuyorsun."], "directed-yes": ["Yönlendirme: Evet", "İlk soruda biri seni yönlendirdiğini söyledin."] };
+  function kisaReasons(signals, answers) {
+    var on = signals.slice();
+    if (on.some(function (x) { return x.code === "recent-redemption"; })) on.push({ code: "panic-taps" });
+    if (answers && answers.directed === "yes") on.push({ code: "directed-yes" });
+    return on;
+  }
+  function reasonStackHtml(risk, ctx, answers) {
+    var on = kisaReasons(risk.signals.filter(function (x) { return x.active && KISA_REASON[x.code]; }), answers);
     if (!on.length) return "";
     var say = function (x) { return x.code === "high-amount" && x.level === "hafif" ? "Tutar, önceki transferlerinden biraz yüksek." : KISA_REASON[x.code][1]; };
     return stackHtml(ctx, "risk-reasons", "Risk", '<span class="risk-sum" aria-hidden="true">' + on.length + ' gerekçe</span>',
@@ -1625,7 +1635,7 @@
         '<p class="agent-muted risk-note">Bunlar işlemin bağlamı. Alıcı hakkında bir hüküm değil.</p>']);
   }
   function riskStackHtml(risk, ctx, fromPct, opts) {
-    if (presentation.kisa) return reasonStackHtml(risk, ctx);
+    if (presentation.kisa) return reasonStackHtml(risk, ctx, opts && opts.answers);
     opts = opts || {};
     var rules = A.RULES.scamShield, pct = Math.max(2, Math.min(98, risk.score));
     var on = risk.signals.filter(function (x) { return x.active; }), amountSig = on.find(function (x) { return x.code === "high-amount" && x.profile; });
@@ -1822,7 +1832,7 @@
     return '<article class="guard-card scam-shield is-context' + (cancelled ? ' is-protected' : '') + '" data-outcome="' + (cancelled ? "cancelled" : o) + '" aria-labelledby="scam-shield-title"><p class="eyebrow guard-eyebrow">Güvenlik kalkanı · ' + head[0] + '</p><h3 id="scam-shield-title" tabindex="-1">' + head[1] + '</h3>' +
       '<p class="amount">' + money + '</p><p class="guard-payee">' + A.escape(sh.payee) + ' · ' + A.escape(sh.recipientIban) + ((sh.signals || []).indexOf("new-payee") >= 0 ? ' · yeni alıcı' : '') + '</p>' +
       '<p class="guard-state" id="shield-state">' + state + '</p>' + body + outcome +
-      '<div class="shield-why">' + riskStackHtml(sh.risk, "shield:" + sh.id) + '</div>' +
+      '<div class="shield-why">' + riskStackHtml(sh.risk, "shield:" + sh.id, undefined, { answers: sh.answers }) + '</div>' +
       '<div class="guard-actions">' + actions + '</div>' + protect + '</article>';
   }
   function scamShieldHtml(s, activeOp) {
@@ -2124,8 +2134,8 @@
   function nearEraHtml(s) {
     if (view.page === "home") return nearTeaserHtml(s);
     var n = era.near, active = nearActive(n), p = n.cycleSent ? n.plan : nearPlan(s, n);
-    var html = '<p class="eyebrow era-eyebrow">Yetkilendirdiğin kurallar</p><h3 id="near-era-title" tabindex="-1">' + active + ' kuralın aktif</h3>' +
-      '<p class="agent-muted era-lead">Her kuralın yetkisi ayrı. İstediğin an kapatabilirsin.</p>' +
+    var html = '<p class="eyebrow era-eyebrow">Sana önerdiğim kurallar</p><h3 id="near-era-title" tabindex="-1">' + active + ' kuralın aktif</h3>' +
+      '<p class="agent-muted era-lead">Harcamana göre önerdim. Hangisi açık kalacak, sen seçersin.</p>' +
       '<ul class="era-rules" aria-label="Yetki kuralların">' + NEAR_RULES.map(function (r) {
         var on = !!n[r.key];
         return '<li class="era-rule' + (on ? '' : ' is-off') + '">' + eraIcon(r.icon, on ? "tone-blue" : "") + '<div><b>' + r.title + '</b><span>' + r.sub + '</span></div>' + eraSwitch("near-rule", r.key, on, r.title + ": " + r.full) + '</li>';
@@ -2463,7 +2473,7 @@
       nextStep("kalkan")
     ],
     kurallar: [
-      { sel: "#near-era-card .era-rules", text: "Kuralları sen koyarsın. Her biri tek dokunuşla açılır, kapanır.", next: true },
+      { sel: "#near-era-card .era-rules", text: "Kuralları ajan önerir, sen açarsın. Her biri tek dokunuşla açılır, kapanır.", next: true },
       { sel: "#near-cycle-prepare", text: "Ay hazır. Önizle.", until: function () { return !!q("#near-cycle-confirm"); } },
       { sel: "#near-era-card .era-timeline", text: "Birikim fona, ödemeler vadesizden, pay hep yerinde.", next: true },
       { sel: "#near-cycle-confirm", text: "Kuralın içinde, tek onay.", until: function () { return era.near.cycleSent; } },
